@@ -1,0 +1,24 @@
+{
+  "name": "html5-game-element-defense",
+  "version": "2.0.0",
+  "description": "A dependency-free HTML5 tower defense with six tower types, six enemy types and twelve configured waves.",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.mjs",
+    "build": "node tools/build-standalone.mjs",
+    "test": "node tests/run.mjs",
+    "check": "node --check src/main.js && node --check src/game.js && node --check src/renderer.js && node --check src/ui.js"
+  },
+  "keywords": [
+    "html5",
+    "game",
+    "canvas",
+    "javascript",
+    "tower-defense"
+  ],
+  "author": "gamelabz",
+  "license": "MIT"
+}
+
+

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08101f" />
+  <meta name="description" content="元素塔防：布置六种炮塔，抵御十二波敌军。" />
+  <title>元素塔防 · Element Defense</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-aurora page-aurora-one" aria-hidden="true"></div>
+  <div class="page-aurora page-aurora-two" aria-hidden="true"></div>
+
+  <main class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">ELEMENT DEFENSE · V2.7 · 12 WAVES</p>
+        <h1>元素<span>塔防</span></h1>
+        <p class="tagline">组合六系炮塔，利用克制关系守住最后一道防线。</p>
+      </div>
+      <div class="phase-badge">
+        <span class="phase-dot" aria-hidden="true"></span>
+        <span id="phase-label">布防阶段</span>
+      </div>
+    </header>
+
+    <section class="hud" aria-label="战局数据">
+      <article class="stat-card">
+        <span class="stat-icon money-icon" aria-hidden="true">◇</span>
+        <span class="stat-copy"><span class="stat-label">资金</span><strong class="stat-value" id="money">130</strong></span>
+      </article>
+      <article class="stat-card" id="lives-card">
+        <span class="stat-icon lives-icon" aria-hidden="true">♥</span>
+        <span class="stat-copy"><span class="stat-label">基地生命</span><strong class="stat-value" id="lives">20</strong></span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-icon wave-icon" aria-hidden="true">≋</span>
+        <span class="stat-copy"><span class="stat-label">当前波次</span><strong class="stat-value"><span id="wave">0</span><small id="wave-total">/12</small></strong></span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-icon threat-icon" aria-hidden="true">◎</span>
+        <span class="stat-copy"><span class="stat-label">场上敌人</span><strong class="stat-value" id="enemy-count">0</strong></span>
+      </article>
+    </section>
+
+    <div class="game-layout">
+      <section class="board-column" aria-label="游戏区域">
+        <div class="stage">
+          <canvas id="game" width="520" height="520" aria-label="元素塔防游戏画布"></canvas>
+          <div class="enemy-layer" id="enemy-layer" aria-hidden="true"></div>
+          <div class="projectile-layer" id="projectile-layer" aria-hidden="true"></div>
+          <div class="tower-layer" id="tower-layer" aria-hidden="true"></div>
+          <div class="effect-layer" id="effect-layer" aria-hidden="true"></div>
+          <div class="placement-hint" id="placement-hint" aria-live="polite" hidden></div>
+          <div class="game-overlay" id="overlay" hidden>
+            <p class="overlay-kicker" id="overlay-kicker">SYSTEM PAUSED</p>
+            <h2 id="overlay-title">游戏暂停</h2>
+            <p id="overlay-text">战场已冻结，准备好后继续。</p>
+            <div class="overlay-actions">
+              <button class="btn btn-primary" id="overlay-resume" type="button">继续战斗</button>
+              <button class="btn btn-ghost" id="overlay-restart" type="button">重新开始</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="message" id="message" aria-live="polite">先选择炮塔并布置防线。可以提前开波，获得额外资金。</p>
+
+        <div class="controls">
+          <button class="btn btn-primary btn-start" id="start" type="button">
+            <span>提前开波</span>
+            <strong id="start-bonus">+40</strong>
+          </button>
+          <button class="btn btn-ghost" id="pause" type="button">暂停</button>
+          <button class="btn btn-ghost" id="restart" type="button">重新开始</button>
+        </div>
+      </section>
+
+      <aside class="sidebar" aria-label="战术面板">
+        <section class="panel wave-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">ENEMY RADAR</p>
+              <h2>敌情雷达</h2>
+            </div>
+            <span class="mini-badge" id="wave-state">布防中</span>
+          </div>
+          <h3 class="wave-title" id="wave-title">第 1 波 · 试探进攻</h3>
+          <div class="wave-composition" id="wave-composition"></div>
+          <div class="wave-meta">
+            <span id="wave-timer">自动开波：20.0 秒</span>
+            <span id="wave-progress-label">0 / 0 已出现</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <span id="wave-progress"></span>
+          </div>
+        </section>
+
+        <section class="panel build-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">BUILD DECK</p>
+              <h2>炮塔部署</h2>
+            </div>
+            <span class="keyboard-hint">已部署 <b id="tower-count">0</b> 座 · 快捷键 1–6</span>
+          </div>
+          <div class="build-menu" id="build-menu"></div>
+        </section>
+
+        <section class="panel selection-panel" id="selection-panel" aria-live="polite">
+          <p class="eyebrow">TACTICAL DETAIL</p>
+          <h2>战术提示</h2>
+          <p class="selection-empty">选择建造卡后点击空地部署；点击已经建成的炮塔，可切换目标优先级。</p>
+          <div class="tip-row"><span>飞行单位</span><strong>仅箭塔、雷暴、狙击可攻击</strong></div>
+          <div class="tip-row"><span>重甲单位</span><strong>优先使用毒巢或高单发伤害</strong></div>
+          <div class="tip-row"><span>密集敌群</span><strong>震荡炮台与连锁闪电效率最高</strong></div>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="app-footer">
+      <span>固定时间步 · 无外部依赖 · 支持 GitHub Pages</span>
+      <span>P 暂停 · Esc 取消选择 · 右键取消</span>
+    </footer>
+  </main>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+

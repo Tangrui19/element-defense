@@ -1,0 +1,25 @@
+# Element Defense — Game Brief
+
+Build a modern, dependency-free HTML5 Canvas tower defense game called **Element Defense**.
+
+## Core Loop
+Build and combine towers during a preparation phase, then survive twelve configured waves of enemies. Early wave calls grant bonus money. Enemies that reach the base reduce lives.
+
+## Current Feature Set
+- Six tower archetypes with distinct roles: rapid single-target, splash damage, slow, chain lightning, long-range heavy hit, and damage over time.
+- Six enemy archetypes: normal, fast, armored, swarm, flying, and boss.
+- Armor mitigation, slow, poison, flight restrictions, and target priority modes.
+- Twelve data-driven waves with mixed groups, wave preview, rewards, and a preparation countdown.
+- Clear state machine: preparing, running, paused, game over, and victory.
+- Fixed-timestep simulation independent of display refresh rate.
+- Responsive DOM HUD, build deck, tactical selection panel, Canvas effects, and range previews.
+
+## Technical Constraints
+- Vanilla JavaScript ES Modules, no framework or build step.
+- One data-driven configuration file for maps, towers, enemies, and waves.
+- No CDN, external assets, or network requests.
+- Static-server compatible and deployable to GitHub Pages.
+- Logic and renderer smoke tests must remain dependency-free.
+
+## Main Files
+`index.html`, `style.css`, `src/`, `tests/`, `server.mjs`, `package.json`, `README.md`, `LICENSE`, `.github/workflows/deploy.yml`.
